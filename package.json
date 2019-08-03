@@ -1,0 +1,16 @@
+{
+  "name": "makebook-js",
+  "version": "0.1.0",
+  "description": "Impose pdf pages for binding",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node 'dist/index.js'"
+  },
+  "devDependencies": {
+    "typescript": "3.5.3",
+    "@types/node": "12.6.9"
+  },
+  "author": "Nathan Russell",
+  "license": "GPL 3"
+}
