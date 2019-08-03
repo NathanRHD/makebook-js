@@ -4,6 +4,13 @@ A utility for taking a normal pdf and impressing multiple pages onto single page
 
 Based on the ['makebook' shell script](https://github.com/dgoodmaniii/makebook) by Donald P. Goodman III.
 
+## To Do
+
+- Reimplement logic for signatures other than quarto
+- Reimplement the internal use of big points (as given by pdfinfo)
+- Update the docs to reflect any changes in defaults/ settings from the original
+- Reimplement conversion of other units (?)
+
 ## Documentation
 
 An overview of how to use this tool (including helpful information on bookbinding) is provided [here](./DOCUMENTATION.md).
