@@ -1,6 +1,12 @@
 # makebook-js
 
-Based on the [makebook shell script](https://github.com/dgoodmaniii/makebook) by Donald P. Goodman III
+Impose pdf pages on sheets for folding and binding.
+
+Based on the ['makebook' shell script](https://github.com/dgoodmaniii/makebook) by Donald P. Goodman III.
+
+## Documentation
+
+An overview of how to use this tool (including helpful information on bookbinding) is provided [here](./DOCUMENTATION.md).
 
 ## System Dependencies
 - pdfinfo

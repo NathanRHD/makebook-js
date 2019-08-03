@@ -1,7 +1,7 @@
 {
   "name": "makebook-js",
   "version": "0.1.0",
-  "description": "Impose pdf pages for binding",
+  "description": "Impose pdf pages on sheets for folding and binding. Based on the 'makebook' shell script by Donald P. Goodman III.",
   "main": "index.js",
   "scripts": {
     "build": "tsc",

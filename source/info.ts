@@ -4,9 +4,9 @@ const VERSION = "0.0.0"
 export const printVersion = () => {
   console.log(`makebook-js v${VERSION}
 
-Impose pdf pages for binding
+Impose pdf pages on sheets for folding and binding.
 
-Originally written by Donald P. Goodman III as a bash script
+Based on the 'makebook' shell script by Donald P. Goodman III.
 
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see the GNU GPL v3 for details.`)
 }
