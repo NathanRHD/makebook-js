@@ -4,7 +4,7 @@ const VERSION = "0.0.0"
 export const printVersion = () => {
   console.log(`makebook-js v${VERSION}
 
-Impose pdf pages on sheets for folding and binding.
+A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
 
 Based on the 'makebook' shell script by Donald P. Goodman III.
 

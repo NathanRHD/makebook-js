@@ -1,6 +1,6 @@
 # makebook-js
 
-Impose pdf pages on sheets for folding and binding.
+A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
 
 Based on the ['makebook' shell script](https://github.com/dgoodmaniii/makebook) by Donald P. Goodman III.
 
@@ -19,4 +19,4 @@ This program is free software:  you can redistribute it and/or modify it under t
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-For a full copy of the GNU General Public License, see [here](http://www.gnu.org/licenses/)
+For a full copy of the GNU General Public License, see [here](http://www.gnu.org/licenses/).
