@@ -1,3 +1,7 @@
+<p style="text-align: center;">
+  <img src="static/logo.png" />
+</p>
+
 # makebook-js
 
 A utility for taking a normal pdf and imposing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
