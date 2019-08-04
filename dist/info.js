@@ -5,7 +5,7 @@ const VERSION = "0.0.0";
 exports.printVersion = () => {
     console.log(`makebook-js v${VERSION}
 
-A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
+A utility for taking a normal pdf and imposing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
 
 Based on the 'makebook' shell script by Donald P. Goodman III.
 

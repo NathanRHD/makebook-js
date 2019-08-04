@@ -1,6 +1,6 @@
 # makebook-js
 
-A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
+A utility for taking a normal pdf and imposing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
 
 Based on the ['makebook' shell script](https://github.com/dgoodmaniii/makebook) by Donald P. Goodman III.
 

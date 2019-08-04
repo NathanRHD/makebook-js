@@ -7,7 +7,7 @@ Based on the 'makebook' shell script by Donald P. Goodman III.
 
 ## Description
 
-A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book. Supports folio, quarto, sexto, octavo, and duodecimo signatures; scaling of source pages; explicit or implicit determination of target page dimensions; and more options. Non-destructive; the original file is not effected.
+A utility for taking a normal pdf and imposing multiple pages onto single pages for printing, folding, and binding as a booklet or book. Supports folio, quarto, sexto, octavo, and duodecimo signatures; scaling of source pages; explicit or implicit determination of target page dimensions; and more options. Non-destructive; the original file is not effected.
 
 ## Definitions
 

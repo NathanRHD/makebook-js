@@ -1,7 +1,7 @@
 {
   "name": "makebook-js",
   "version": "0.1.0",
-  "description": "A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book. Based on the 'makebook' shell script by Donald P. Goodman III.",
+  "description": "A utility for taking a normal pdf and imposing multiple pages onto single pages for printing, folding, and binding as a booklet or book. Based on the 'makebook' shell script by Donald P. Goodman III.",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
