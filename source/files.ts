@@ -5,17 +5,18 @@ import { OpaqueString } from "./types";
 type FileVersion = OpaqueString<"fileVersion">
 
 export const fileVersions = {
-  sourceFile: "source" as FileVersion,
-  blankingFile: "blanking" as FileVersion,
-  blankedFile: "blanked" as FileVersion,
-  reorderedFile: "reordered" as FileVersion,
-  sigFile: (sigIndex: number) => `sig-${sigIndex}` as FileVersion,
-  texFile: "tex" as FileVersion
+  sourceFile: "source.pdf" as FileVersion,
+  blankingFile: "blanking.pdf" as FileVersion,
+  blankedFile: "blanked.pdf" as FileVersion,
+  reorderedFile: "reordered.pdf" as FileVersion,
+  gatheringFile: (gatheringIndex: number) => `gathering-${gatheringIndex}.pdf` as FileVersion,
+  texFile: ".tex" as FileVersion
 }
 
 export type GetTempFilename = (version: FileVersion) => string
 
+// if no version is provided, default to pdf
 export const getTempFilenameFactory = (guid: string): GetTempFilename => {
-  return (version: FileVersion) => `tmp_${guid}${version !== null ? "_" + version : ""}.pdf`
+  return (version?: FileVersion) => `tmp_${guid}${version !== null ? "_" + version : ".pdf"}`
 }
 

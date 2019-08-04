@@ -10,13 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const files_1 = require("./files");
 const commands_1 = require("./commands");
-exports.blankPages = (totalPages, pagesPerSig, getTempFilename, verbose, favourFront) => __awaiter(this, void 0, void 0, function* () {
+exports.blankPages = (totalPages, pagesPerGathering, getTempFilename, verbose, favourFront) => __awaiter(this, void 0, void 0, function* () {
     const sourceFilename = getTempFilename(files_1.fileVersions.sourceFile);
     const blankFilename = "static/blank.pdf";
     const blankedFilename = getTempFilename(files_1.fileVersions.blankedFile);
     const blankingFilename = getTempFilename(files_1.fileVersions.blankingFile);
     // determine if extra pages will be necessary
-    let totalBlankPages = totalPages % pagesPerSig;
+    let totalBlankPages = totalPages % pagesPerGathering;
     // now insert blank pages as needed, preferring the back for
     // odd numbers by default, front if stated
     if (!totalBlankPages) {
@@ -48,15 +48,22 @@ exports.blankPages = (totalPages, pagesPerSig, getTempFilename, verbose, favourF
             console.log(`Inserting ${startBlankPages} blank pages at the start and ${endBlankPages} at the end...`);
         }
         yield commands_1.copyFile(sourceFilename, blankedFilename);
-        for (let i = 0; i < startBlankPages; i++) {
+        // @todo rather than calling cat to add one page a number of times, call cat once to add a number of pages...
+        for (let startIndex = 0; startIndex < startBlankPages; startIndex++) {
+            if (verbose) {
+                console.log(`Inserting start page ${startIndex}`);
+            }
             // add a blank page to the beginning of the blanked files content to create a new blanking file
-            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1 - end");
+            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1-end");
             // replace the blanked file with the blanking file
             yield commands_1.moveFile(blankingFilename, blankedFilename);
         }
-        for (let i = 0; i < endBlankPages; i++) {
+        for (let endIndex = 0; endIndex < endBlankPages; endIndex++) {
+            if (verbose) {
+                console.log(`Inserting end page ${endIndex}`);
+            }
             // add a blank page to the end of the target file's content to create a new temp file
-            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1 - end B1");
+            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1-end B1");
             // replace the target file with the temp
             yield commands_1.moveFile(getTempFilename(files_1.fileVersions.blankingFile), getTempFilename(files_1.fileVersions.blankedFile));
         }

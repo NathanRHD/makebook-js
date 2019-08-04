@@ -13,7 +13,7 @@ const pdfInfo_1 = require("./pdfInfo");
 exports.getTargetPageSize = (config, getTempFilename) => __awaiter(this, void 0, void 0, function* () {
     const tempSourceFilename = getTempFilename(files_1.fileVersions.sourceFile);
     const sourcePdfInfo = yield pdfInfo_1.pdfInfo(tempSourceFilename);
-    switch (config.sigType) {
+    switch (config.format) {
         case "quarto": {
             return {
                 height: sourcePdfInfo.pageHeight * 2,

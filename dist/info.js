@@ -4,9 +4,12 @@ const VERSION = "0.0.0";
 // print the version information and exit successfully
 exports.printVersion = () => {
     console.log(`makebook-js v${VERSION}
-Originally written by Donald P. Goodman III as a bash script
+
+A utility for taking a normal pdf and impressing multiple pages onto single pages for printing, folding, and binding as a booklet or book.
+
+Based on the 'makebook' shell script by Donald P. Goodman III.
+
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see the GNU GPL v3 for details.`);
-    return;
 };
 // print the online help and exit successfully
 exports.printHelp = () => {
@@ -26,5 +29,4 @@ exports.printHelp = () => {
 - s: Scaling of source pages to target page.
 - i: Input file.
 - o: Output file.`);
-    return;
 };

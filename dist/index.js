@@ -15,40 +15,25 @@ const blank_1 = require("./blank");
 const reorder_1 = require("./reorder");
 const impose_1 = require("./impose");
 const pdfInfo_1 = require("./pdfInfo");
-const fileVersions = {
-    sourceFile: "source",
-    blankingFile: "blanking",
-    blankedFile: "blanked",
-    reorderedFile: "reordered",
-    sigFile: (sigIndex) => `sig-${sigIndex}`,
-    texFile: "tex"
-};
-const getTempFilenameFactory = (guid) => {
-    return (version) => `tmp_${guid}${version !== null ? "_" + version : ""}.pdf`;
-};
+const files_1 = require("./files");
 const init = () => __awaiter(this, void 0, void 0, function* () {
     const guid = new Date().valueOf();
-    const getTempFilename = getTempFilenameFactory(guid + "");
+    const getTempFilename = files_1.getTempFilenameFactory(guid + "");
     const config = config_1.getConfig();
-    if (config.help) {
-        info_1.printHelp();
-        return;
-    }
     if (config.verbose) {
         info_1.printVersion();
     }
     const sourceFilename = config.sourceFilename ||
-        (yield commands_1.prompt("Source Filename:"));
-    const tempSourceFilename = getTempFilename(fileVersions.sourceFile);
+        (yield commands_1.prompt("Source Filename: $"));
+    const tempSourceFilename = getTempFilename(files_1.fileVersions.sourceFile);
     yield commands_1.copyFile(sourceFilename, tempSourceFilename);
     // get some information about our source document
-    // @todo implement
     const sourcePdfInfo = yield pdfInfo_1.pdfInfo(tempSourceFilename);
     // find the number of pages we'll have per signature
-    const pagesPerSig = config.pagesPerSig * config.sectionType;
-    const totalBlankPages = yield blank_1.blankPages(sourcePdfInfo.totalPages, pagesPerSig, getTempFilename, config.verbose, config.favourFront);
-    const totalSignatures = (sourcePdfInfo.totalPages + totalBlankPages) / pagesPerSig;
-    yield reorder_1.reorderPages(totalSignatures, config, getTempFilename);
+    const pagesPerGathering = config.pagesPerSheet * config.sheetsPerGathering;
+    const totalBlankPages = yield blank_1.blankPages(sourcePdfInfo.totalPages, pagesPerGathering, getTempFilename, config.verbose, config.favourFront);
+    const totalGatherings = (sourcePdfInfo.totalPages + totalBlankPages) / pagesPerGathering;
+    yield reorder_1.reorderPages(totalGatherings, config, getTempFilename);
     yield impose_1.imposePages(config, getTempFilename);
 });
 init();

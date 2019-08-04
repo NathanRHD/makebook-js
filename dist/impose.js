@@ -19,22 +19,23 @@ exports.imposePages = (config, getTempFilename) => __awaiter(this, void 0, void 
   \\usepackage{ pdfpages }
   
   \\usepackage[
-      paperwidth=${targetPageSize.width}bp,
-      paperheight=${targetPageSize.height}bp
+      paperwidth=${targetPageSize.width}pt,
+      paperheight=${targetPageSize.height}pt
   ]{ geometry }
   
   \\pagestyle{empty}
   
   \\begin{document}
   \\includepdf[
-      nup=4x2,
+      nup=${config.nUp},
       pages=-,
       turn=false,
       columnstrict,
   ]{${getTempFilename(files_1.fileVersions.reorderedFile)}}
       
   \\end{document}`;
-    yield commands_1.writeFile(texFilename, texTemplate);
+    yield commands_1.writeFileAsync(texFilename, texTemplate);
     yield commands_1.pdfLatex(texFilename);
     console.log("Success!");
+    process.exit();
 });

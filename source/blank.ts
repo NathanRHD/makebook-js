@@ -1,14 +1,14 @@
 import { GetTempFilename, fileVersions } from "./files";
 import { pdftkCat, moveFile, copyFile } from "./commands";
 
-export const blankPages = async (totalPages: number, pagesPerSig: number, getTempFilename: GetTempFilename, verbose: boolean, favourFront: boolean) => {
+export const blankPages = async (totalPages: number, pagesPerGathering: number, getTempFilename: GetTempFilename, verbose: boolean, favourFront: boolean) => {
   const sourceFilename = getTempFilename(fileVersions.sourceFile)
   const blankFilename = "static/blank.pdf"
   const blankedFilename = getTempFilename(fileVersions.blankedFile)
   const blankingFilename = getTempFilename(fileVersions.blankingFile)
 
   // determine if extra pages will be necessary
-  let totalBlankPages = totalPages % pagesPerSig
+  let totalBlankPages = totalPages % pagesPerGathering
 
 
   // now insert blank pages as needed, preferring the back for
@@ -48,11 +48,11 @@ export const blankPages = async (totalPages: number, pagesPerSig: number, getTem
 
     await copyFile(sourceFilename, blankedFilename);
 
-
     // @todo rather than calling cat to add one page a number of times, call cat once to add a number of pages...
-    for (let i = 0; i < startBlankPages; i++) {
+    for (let startIndex = 0; startIndex < startBlankPages; startIndex++) {
+      if (verbose) { console.log(`Inserting start page ${startIndex}`) }
       // add a blank page to the beginning of the blanked files content to create a new blanking file
-      await pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1 - end")
+      await pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1-end")
 
       // replace the blanked file with the blanking file
       await moveFile(
@@ -61,9 +61,11 @@ export const blankPages = async (totalPages: number, pagesPerSig: number, getTem
       )  
     }
 
-    for (let i = 0; i < endBlankPages; i++) {
+    for (let endIndex = 0; endIndex < endBlankPages; endIndex++) {
+      if (verbose) { console.log(`Inserting end page ${endIndex}`) }
+
       // add a blank page to the end of the target file's content to create a new temp file
-      await pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1 - end B1")
+      await pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1-end B1")
 
       // replace the target file with the temp
       await moveFile(

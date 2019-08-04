@@ -1,6 +1,6 @@
 import { GetTempFilename, fileVersions } from "./files";
-import { pdfLatex, writeFile } from "./commands";
-import { PageSize, getTargetPageSize } from "./pageSize";
+import { pdfLatex, writeFileAsync } from "./commands";
+import { getTargetPageSize } from "./pageSize";
 import { FullConfig } from "./config";
 
 export const imposePages = async (config: FullConfig, getTempFilename: GetTempFilename) => {
@@ -14,15 +14,15 @@ export const imposePages = async (config: FullConfig, getTempFilename: GetTempFi
   \\usepackage{ pdfpages }
   
   \\usepackage[
-      paperwidth=${targetPageSize.width}pts,
-      paperheight=${targetPageSize.height}pts
+      paperwidth=${targetPageSize.width}pt,
+      paperheight=${targetPageSize.height}pt
   ]{ geometry }
   
   \\pagestyle{empty}
   
   \\begin{document}
   \\includepdf[
-      nup=4x2,
+      nup=${config.nUp},
       pages=-,
       turn=false,
       columnstrict,
@@ -30,9 +30,11 @@ export const imposePages = async (config: FullConfig, getTempFilename: GetTempFi
       
   \\end{document}`
 
-  await writeFile(texFilename, texTemplate)
+  await writeFileAsync(texFilename, texTemplate)
 
   await pdfLatex(texFilename)
 
   console.log("Success!")
+
+  process.exit()
 }

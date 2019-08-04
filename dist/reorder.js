@@ -11,29 +11,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const files_1 = require("./files");
 const commands_1 = require("./commands");
 // take pages from the temp file and reorder them into the target file:
-exports.reorderPages = (totalSignatures, config, getTempFilename) => __awaiter(this, void 0, void 0, function* () {
-    for (let sigIndex = 1; sigIndex <= totalSignatures; sigIndex++) {
-        console.log(`Rearranging section number ${sigIndex}...`);
+exports.reorderPages = (totalGatherings, config, getTempFilename) => __awaiter(this, void 0, void 0, function* () {
+    for (let gatheringIndex = 1; gatheringIndex <= totalGatherings; gatheringIndex++) {
+        console.log(`Rearranging gathering number ${gatheringIndex}...`);
         const blankedFile = getTempFilename(files_1.fileVersions.blankedFile);
         const reorderedFile = getTempFilename(files_1.fileVersions.reorderedFile);
-        const sigFile = getTempFilename(files_1.fileVersions.sigFile(sigIndex));
-        switch (config.sigType) {
+        const gatheringFile = getTempFilename(files_1.fileVersions.gatheringFile(gatheringIndex));
+        switch (config.format) {
             case "quarto": {
-                // can't work out with this represents...
-                for (let n = 1; n <= config.sectionType; n++) {
-                    // can't work out what these represent...
-                    const m = config.sectionType * 8 - config.sectionType * n;
-                    const k = sigIndex + 4 * n;
-                    // append a newly imposed signature to the existing ones
-                    const catString = `B${k + m - 1} B${k} B${k + m - 4}south B${k + 3}south B${k + 1} B${k + m - 2} B${k + 2}south B${k + m - 3}south`;
-                    if (sigIndex === 1 && n === 1) {
-                        yield commands_1.pdftkCat(null, blankedFile, sigFile, catString);
-                    }
-                    else {
-                        yield commands_1.pdftkCat(reorderedFile, blankedFile, sigFile, `A1-end ${catString}`);
-                    }
-                    yield commands_1.moveFile(sigFile, reorderedFile);
+                const catStrings = [];
+                for (let sheetIndex = 1; sheetIndex <= config.sheetsPerGathering; sheetIndex++) {
+                    // can't work out what these represent - which makes sense because I've broken it!
+                    const m = config.sheetsPerGathering * config.pagesPerSheet - config.sheetsPerGathering * sheetIndex;
+                    const k = gatheringIndex + 4 * sheetIndex;
+                    // append a newly imposed sheet to the existing ones
+                    catStrings.push(`B${k + m - 1} B${k} B${k + m - 4}south B${k + 3}south B${k + 1} B${k + m - 2} B${k + 2}south B${k + m - 3}south`);
                 }
+                // combine multiple pdftk calls into one
+                // (if the catString gets long, could this cause problems?)
+                const firstCat = gatheringIndex === 1;
+                const finalCatString = firstCat ? catStrings.join(" ") : `A1-end ${catStrings.join(" ")}`;
+                const aFilename = firstCat ? null : reorderedFile;
+                yield commands_1.pdftkCat(aFilename, blankedFile, gatheringFile, finalCatString);
+                yield commands_1.moveFile(gatheringFile, reorderedFile);
             }
         }
     }

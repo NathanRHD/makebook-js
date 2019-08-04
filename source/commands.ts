@@ -1,3 +1,5 @@
+import { writeFile } from "fs";
+
 // async/await wrappers for calling various shell commands
 
 const util = require("util");
@@ -28,11 +30,19 @@ export const pdftkCat = async (
   destinationFilename: string, 
   catString: string
 ) => {
-  const response = await exec(`pdftk ${aFilename !== null ? `A="${aFilename}"` : ""} B="${bFilename}" cat ${catString} output ${destinationFilename}`)
+  const response = await exec(`pdftk ${aFilename !== null ? `A="${aFilename}"` : ""} B="${bFilename}" cat ${catString} output "${destinationFilename}"`)
 }
 
-export const writeFile = async (filename: string, content: string) => {
-  // not sure how to do this...
+export const writeFileAsync = (filename: string, content: string) => {
+ return new Promise((res, rej) => writeFile(filename, content, {}, (err) => {
+  if (err) {
+    rej(err)
+  }
+
+  else {
+    res()
+  }
+ }))
 }
 
 export const copyFile = async (sourceFilename: string, targetFilename: string) => {

@@ -11,7 +11,7 @@ export const getTargetPageSize = async (config: FullConfig, getTempFilename: Get
   const tempSourceFilename = getTempFilename(fileVersions.sourceFile)
   const sourcePdfInfo = await pdfInfo(tempSourceFilename)
 
-  switch (config.sigType) {
+  switch (config.format) {
     case "quarto": {
       return {
         height: sourcePdfInfo.pageHeight * 2,

@@ -1,5 +1,4 @@
 "use strict";
-// async/await wrappers for calling various shell commands
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -9,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
+// async/await wrappers for calling various shell commands
 const util = require("util");
 exports.exec = util.promisify(require("child_process").exec);
 const readline = require('readline').createInterface({
@@ -26,11 +27,18 @@ exports.pdfLatex = (filename) => __awaiter(this, void 0, void 0, function* () {
     yield exports.exec(`pdflatex "${filename}"`);
 });
 exports.pdftkCat = (aFilename, bFilename, destinationFilename, catString) => __awaiter(this, void 0, void 0, function* () {
-    const response = yield exports.exec(`pdftk ${aFilename !== null ? `A="${aFilename}"` : ""} B="${bFilename}" cat ${catString} output ${destinationFilename}`);
+    const response = yield exports.exec(`pdftk ${aFilename !== null ? `A="${aFilename}"` : ""} B="${bFilename}" cat ${catString} output "${destinationFilename}"`);
 });
-exports.writeFile = (filename, content) => __awaiter(this, void 0, void 0, function* () {
-    // not sure how to do this...
-});
+exports.writeFileAsync = (filename, content) => {
+    return new Promise((res, rej) => fs_1.writeFile(filename, content, {}, (err) => {
+        if (err) {
+            rej(err);
+        }
+        else {
+            res();
+        }
+    }));
+};
 exports.copyFile = (sourceFilename, targetFilename) => __awaiter(this, void 0, void 0, function* () {
     yield exports.exec(`cp "${sourceFilename}" "${targetFilename}"`);
 });
