@@ -15,58 +15,37 @@ exports.blankPages = (totalPages, pagesPerGathering, getTempFilename, verbose, f
     const blankFilename = "static/blank.pdf";
     const blankedFilename = getTempFilename(files_1.fileVersions.blankedFile);
     const blankingFilename = getTempFilename(files_1.fileVersions.blankingFile);
-    // determine if extra pages will be necessary
-    let totalBlankPages = totalPages % pagesPerGathering;
-    // now insert blank pages as needed, preferring the back for
-    // odd numbers by default, front if stated
-    if (!totalBlankPages) {
-        if (verbose) {
-            console.log("Inserting one blank page...");
-        }
-        if (!favourFront) {
-            // add a blank page to the end
-            yield commands_1.pdftkCat(sourceFilename, blankFilename, blankedFilename, "A1-end B1");
-        }
-        else {
-            // add a blank page to the start
-            yield commands_1.pdftkCat(sourceFilename, blankFilename, blankedFilename, "B1 A1-end");
-        }
+    const ungatheredPages = totalPages % pagesPerGathering;
+    const minimumBlankPages = pagesPerGathering - ungatheredPages;
+    // ensure that there are at least 2 blank pages at the front to ensure the first/title page is verso
+    const totalBlankPages = minimumBlankPages >= 2 ?
+        minimumBlankPages
+        :
+            minimumBlankPages + pagesPerGathering;
+    let startBlankPages = favourFront ?
+        Math.ceil(totalBlankPages / 2)
+        :
+            Math.floor(totalBlankPages / 2);
+    startBlankPages = Math.max(startBlankPages, 2);
+    const endBlankPages = totalBlankPages - startBlankPages;
+    if (verbose) {
+        console.log(`Inserting ${startBlankPages} blank pages at the start and ${endBlankPages} at the end...`);
     }
-    else {
-        let startBlankPages = favourFront ?
-            Math.ceil(totalBlankPages / 2)
-            :
-                Math.floor(totalBlankPages / 2);
-        let endBlankPages = totalBlankPages - startBlankPages;
-        // an odd number is needed at the front, assuming the initial (title)page is verso
-        if (favourFront &&
-            startBlankPages % 2 === 0) {
-            startBlankPages++;
-            endBlankPages++;
-        }
+    yield commands_1.copyFile(sourceFilename, blankedFilename);
+    // @todo rather than calling cat to add one page a number of times, call cat once to add a number of pages...
+    for (let startIndex = 0; startIndex < startBlankPages; startIndex++) {
         if (verbose) {
-            console.log(`Inserting ${startBlankPages} blank pages at the start and ${endBlankPages} at the end...`);
+            console.log(`Inserting start page ${startIndex}`);
         }
-        yield commands_1.copyFile(sourceFilename, blankedFilename);
-        // @todo rather than calling cat to add one page a number of times, call cat once to add a number of pages...
-        for (let startIndex = 0; startIndex < startBlankPages; startIndex++) {
-            if (verbose) {
-                console.log(`Inserting start page ${startIndex}`);
-            }
-            // add a blank page to the beginning of the blanked files content to create a new blanking file
-            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1-end");
-            // replace the blanked file with the blanking file
-            yield commands_1.moveFile(blankingFilename, blankedFilename);
+        yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "B1 A1-end");
+        yield commands_1.moveFile(blankingFilename, blankedFilename);
+    }
+    for (let endIndex = 0; endIndex < endBlankPages; endIndex++) {
+        if (verbose) {
+            console.log(`Inserting end page ${endIndex}`);
         }
-        for (let endIndex = 0; endIndex < endBlankPages; endIndex++) {
-            if (verbose) {
-                console.log(`Inserting end page ${endIndex}`);
-            }
-            // add a blank page to the end of the target file's content to create a new temp file
-            yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1-end B1");
-            // replace the target file with the temp
-            yield commands_1.moveFile(getTempFilename(files_1.fileVersions.blankingFile), getTempFilename(files_1.fileVersions.blankedFile));
-        }
+        yield commands_1.pdftkCat(blankedFilename, blankFilename, blankingFilename, "A1-end B1");
+        yield commands_1.moveFile(getTempFilename(files_1.fileVersions.blankingFile), getTempFilename(files_1.fileVersions.blankedFile));
     }
     return totalBlankPages;
 });

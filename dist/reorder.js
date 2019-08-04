@@ -17,15 +17,18 @@ exports.reorderPages = (totalGatherings, config, getTempFilename) => __awaiter(t
         const blankedFile = getTempFilename(files_1.fileVersions.blankedFile);
         const reorderedFile = getTempFilename(files_1.fileVersions.reorderedFile);
         const gatheringFile = getTempFilename(files_1.fileVersions.gatheringFile(gatheringIndex));
+        const pagesPerGathering = config.sheetsPerGathering * config.pagesPerSheet;
         switch (config.format) {
             case "quarto": {
                 const catStrings = [];
                 for (let sheetIndex = 1; sheetIndex <= config.sheetsPerGathering; sheetIndex++) {
-                    // can't work out what these represent - which makes sense because I've broken it!
-                    const m = config.sheetsPerGathering * config.pagesPerSheet - config.sheetsPerGathering * sheetIndex;
-                    const k = gatheringIndex + 4 * sheetIndex;
+                    // (shouldn't this include the sheet index somewhere?)
+                    const initialPageNumber = 1 + (pagesPerGathering * (gatheringIndex - 1)) + (config.pagesPerSheet * (sheetIndex - 1));
+                    console.log("INITIAL PAGE NUMBER", initialPageNumber);
+                    console.log("GATHERING", gatheringIndex);
+                    console.log("SHEET", sheetIndex);
                     // append a newly imposed sheet to the existing ones
-                    catStrings.push(`B${k + m - 1} B${k} B${k + m - 4}south B${k + 3}south B${k + 1} B${k + m - 2} B${k + 2}south B${k + m - 3}south`);
+                    catStrings.push(`B${initialPageNumber + config.pagesPerSheet - 1} B${initialPageNumber} B${initialPageNumber + config.pagesPerSheet - 4}south B${initialPageNumber + 3}south B${initialPageNumber + 1} B${initialPageNumber + config.pagesPerSheet - 2} B${initialPageNumber + 2}south B${initialPageNumber + config.pagesPerSheet - 3}south`);
                 }
                 // combine multiple pdftk calls into one
                 // (if the catString gets long, could this cause problems?)
