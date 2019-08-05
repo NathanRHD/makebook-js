@@ -1,5 +1,5 @@
 <p align="center" style="text-align: center;">
-  <img src="static/logo.png" />
+  <img src="static/logo.png" with="173" height="110" style="width: 173px; height: 110px;" />
 </p>
 
 # makebook-js
